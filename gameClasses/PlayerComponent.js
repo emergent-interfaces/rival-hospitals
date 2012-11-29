@@ -44,9 +44,7 @@ var PlayerComponent = IgeClass.extend({
 		switch (direction) {
 			case 'N':
 				this._box2dBody.SetLinearVelocity(new IgePoint(0, -vel, 0));
-				this._box2dBody.SetAwake(true);
 				this.align_feet(180 * Math.PI/ 180);
-				//this.animation.select('walkUp');
 				break;
 			case 'NE':
 				this._box2dBody.SetLinearVelocity(new IgePoint(vel*0.707, -vel*0.707, 0));
@@ -79,12 +77,13 @@ var PlayerComponent = IgeClass.extend({
 
 			default:
 				this._box2dBody.SetLinearVelocity(new IgePoint(0, 0, 0));
-				//this.animation.stop();
+				this.bottom.animation.select('stand');
 				break;
 		}
 
 		if (direction !== "") {
 			this._box2dBody.SetAwake(true);
+			this.bottom.animation.select('walk');
 		}
 	}
 });
