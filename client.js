@@ -3,21 +3,23 @@ var Client = IgeClass.extend({
 
 	init: function() {
 		ige.showStats(1);
-		//ige.input.debug(true);
+		ige.globalSmoothing(true);
+
 		var self = this;
+		this.obj = [];
 
 		ige.createFrontBuffer(true);
 
 		ige.addComponent(IgeBox2dComponent)
 			.box2d.sleep(true)
 			.box2d.gravity(0, 0)
-			.box2d.createWorld();
+			.box2d.createWorld()
+			.box2d.start();
 
 		self.textures = {};
 		self.textures.tiles = new IgeCellSheet('./assets/images/tiles.png', 8, 8);
 
 		ige.on('texturesLoaded', function() {
-			ige.createFrontBuffer(true);
 			ige.start(function (success) {
 				if (success) {
 					self.scene1 = new IgeScene2d().id('scene1');
@@ -42,7 +44,7 @@ var Client = IgeClass.extend({
 					self.backgroundLayer.paintTile(4, 1, 0, 50);
 
 					self.medic = new TwistableCharacter()
-						.id('twistableCharacter1')
+						.id('medic1')
 						.addComponent(PlayerComponent)
 						.box2dBody({
 							type: 'dynamic',
@@ -65,8 +67,8 @@ var Client = IgeClass.extend({
 						.mount(self.scene1)
 
 					// Look at the player
-					self.vp1.camera.lookAt(self.player1);
-					self.vp1.camera.trackTranslate(self.player1, 10);
+					self.vp1.camera.lookAt(self.medic);
+					self.vp1.camera.trackTranslate(self.medic, 10);
 
 					// For testing
 					ige.sceneGraph();

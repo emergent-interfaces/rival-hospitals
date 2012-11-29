@@ -45,36 +45,36 @@ var PlayerComponent = IgeClass.extend({
 			case 'N':
 				this._box2dBody.SetLinearVelocity(new IgePoint(0, -vel, 0));
 				this._box2dBody.SetAwake(true);
-				this.align(180 * Math.PI/ 180);
+				this.align_feet(180 * Math.PI/ 180);
 				//this.animation.select('walkUp');
 				break;
 			case 'NE':
 				this._box2dBody.SetLinearVelocity(new IgePoint(vel*0.707, -vel*0.707, 0));
-				this.align(-135 * Math.PI/ 180);
+				this.align_feet(-135 * Math.PI/ 180);
 				break;
 			case 'E':
 				this._box2dBody.SetLinearVelocity(new IgePoint(vel, 0, 0));
-				this.align(-90 * Math.PI/ 180);
+				this.align_feet(-90 * Math.PI/ 180);
 				break;
 			case 'SE':
 				this._box2dBody.SetLinearVelocity(new IgePoint(vel*0.707, vel*0.707, 0));
-				this.align(-45 * Math.PI/ 180);
+				this.align_feet(-45 * Math.PI/ 180);
 				break;
 			case 'S':
 				this._box2dBody.SetLinearVelocity(new IgePoint(0, vel, 0));
-				this.align(0 * Math.PI/ 180);
+				this.align_feet(0 * Math.PI/ 180);
 				break;
 			case 'SW':
 				this._box2dBody.SetLinearVelocity(new IgePoint(-vel*0.707, vel*0.707, 0));
-				this.align(45 * Math.PI/ 180);
+				this.align_feet(45 * Math.PI/ 180);
 				break;
 			case 'W':
 				this._box2dBody.SetLinearVelocity(new IgePoint(-vel, 0, 0));
-				this.align(90 * Math.PI/ 180);
+				this.align_feet(90 * Math.PI/ 180);
 				break;
 			case 'NW':
 				this._box2dBody.SetLinearVelocity(new IgePoint(-vel*0.707, -vel*0.707, 0));
-				this.align(135 * Math.PI/ 180);
+				this.align_feet(135 * Math.PI/ 180);
 				break;
 
 			default:
