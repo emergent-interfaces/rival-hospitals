@@ -18,7 +18,7 @@ var TwistableCharacter = IgeEntityBox2d.extend({
 		this._super(ctx);
 	},
 
-	lookTowards: function(angle) {
+	look_towards: function(angle) {
 		this.top.rotateTo(0, 0, -angle);
 	},
 
