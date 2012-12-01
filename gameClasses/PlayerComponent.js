@@ -13,7 +13,7 @@ var PlayerComponent = IgeClass.extend({
 		ige.input.mapAction('walkDown', ige.input.key.s);
 		ige.input.on('keyUp', function (event, keyCode) { self._keyUp(event, keyCode); });
 
-		this._entity.addBehaviour('playerComponent_behaviour', this._behaviour);
+		this._entity.addBehaviour('playerComponent_move', this._move);
 		this._entity.addBehaviour('playerComponent_look', this._look);
 
 		this.target = {x: 0, y: 0, angle: 0, range: 0};
@@ -24,23 +24,20 @@ var PlayerComponent = IgeClass.extend({
 	},
 
 	_look: function (ctx) {
-		if (ige._mouseOverVp) {
-			mouse_x = ige._mouseOverVp._mousePos.x;
-			mouse_y = ige._mouseOverVp._mousePos.y;
-		} else {
-			mouse_x = ige._mousePos.x;
-			mouse_y = ige._mousePos.y;
-		}
+		var x = null, y = null;
+
+		mouse_x = ige._mousePos.x + ige._currentCamera._translate.x;
+		mouse_y = ige._mousePos.y + ige._currentCamera._translate.y;
 
 		this.player.target.x = mouse_x - this._translate.x;
 		this.player.target.y = mouse_y - this._translate.y;
-		this.player.target.angle = Math.atan2(this.player.target.x, this.player.target.y);
+		this.player.target.angle = Math.atan2(this.player.target.y, this.player.target.x);
 		this.player.target.range = Math.sqrt(Math.pow(this.player.target.x, 2) + Math.pow(this.player.target.y, 2));
 
 		this.look_towards(this.player.target.angle);
 	},
 
-	_behaviour: function (ctx) {
+	_move: function (ctx) {
 		var vel = 6;
 		var direction = '';
 
@@ -54,35 +51,35 @@ var PlayerComponent = IgeClass.extend({
 		switch (direction) {
 			case 'S':
 				this._box2dBody.SetLinearVelocity(new IgePoint(0, vel, 0));
-				move_angle = 0;
+				move_angle = 90 * Math.PI/180;
 				break;
 			case 'SW':
 				this._box2dBody.SetLinearVelocity(new IgePoint(-vel*0.707, vel*0.707, 0));
-				move_angle = 45;
+				move_angle = 135 * Math.PI/180;
 				break;
 			case 'W':
 				this._box2dBody.SetLinearVelocity(new IgePoint(-vel, 0, 0));
-				move_angle = 90;
+				move_angle = 180 * Math.PI/180;
 				break;
 			case 'NW':
 				this._box2dBody.SetLinearVelocity(new IgePoint(-vel*0.707, -vel*0.707, 0));
-				move_angle = 135;
+				move_angle = -135 * Math.PI/180;
 				break;
 			case 'N':
 				this._box2dBody.SetLinearVelocity(new IgePoint(0, -vel, 0));
-				move_angle = 180;
+				move_angle = -90 * Math.PI/180;
 				break;
 			case 'NE':
 				this._box2dBody.SetLinearVelocity(new IgePoint(vel*0.707, -vel*0.707, 0));
-				move_angle = 225;
+				move_angle = -45 * Math.PI/180;
 				break;
 			case 'E':
 				this._box2dBody.SetLinearVelocity(new IgePoint(vel, 0, 0));
-				move_angle = 270;
+				move_angle = 0 * Math.PI/180;
 				break;
 			case 'SE':
 				this._box2dBody.SetLinearVelocity(new IgePoint(vel*0.707, vel*0.707, 0));
-				move_angle = 315;
+				move_angle = 45 * Math.PI/180;
 				break;
 
 			default:
@@ -94,7 +91,16 @@ var PlayerComponent = IgeClass.extend({
 		if (direction !== "") {
 			this._box2dBody.SetAwake(true);
 			this.bottom.animation.select('walk');
-			this.align_feet(move_angle * Math.PI/180);
+			
+			// Walk backwards if we are looking in the opposite direction we're moving
+			angle_delta = this.player.target.angle - move_angle
+			while (angle_delta <= -Math.PI) angle_delta += 2*Math.PI;
+		    while (angle_delta > Math.PI) angle_delta -= 2*Math.PI;
+			if (angle_delta > Math.PI/2 || angle_delta < -Math.PI/2) {
+				move_angle += Math.PI;
+			}
+
+			this.align_feet(move_angle);
 		}
 	}
 });

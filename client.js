@@ -68,7 +68,7 @@ var Client = IgeClass.extend({
 
 					// Look at the player
 					self.vp1.camera.lookAt(self.medic);
-					self.vp1.camera.trackTranslate(self.medic, 10);
+					self.vp1.camera.trackTranslate(self.medic, 0);
 
 					// For testing
 					ige.sceneGraph();

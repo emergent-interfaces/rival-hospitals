@@ -19,7 +19,7 @@ var TwistableCharacter = IgeEntityBox2d.extend({
 	},
 
 	look_towards: function(angle) {
-		this.top.rotateTo(0, 0, -angle);
+		this.top.rotateTo(0, 0, angle);
 	},
 
 	align_feet: function(angle) {
