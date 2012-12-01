@@ -46,54 +46,27 @@ var PlayerComponent = IgeClass.extend({
 		if (ige.input.actionState('walkLeft')) { direction += 'W'; }
 		if (ige.input.actionState('walkRight')) { direction += 'E'; }
 
-		move_angle = null;
+		var directionMap = {};
+		directionMap["S"] = 90 * Math.PI/180;
+		directionMap["SW"] = 135 * Math.PI/180;
+		directionMap["W"] = 180 * Math.PI/180;
+		directionMap["NW"] = -135 * Math.PI/180;
+		directionMap["N"] = -90 * Math.PI/180;
+		directionMap["NE"] = -45 * Math.PI/180;
+		directionMap["E"] = 0 * Math.PI/180;
+		directionMap["SE"] = 45 * Math.PI/180;
 
-		switch (direction) {
-			case 'S':
-				this._box2dBody.SetLinearVelocity(new IgePoint(0, vel, 0));
-				move_angle = 90 * Math.PI/180;
-				break;
-			case 'SW':
-				this._box2dBody.SetLinearVelocity(new IgePoint(-vel*0.707, vel*0.707, 0));
-				move_angle = 135 * Math.PI/180;
-				break;
-			case 'W':
-				this._box2dBody.SetLinearVelocity(new IgePoint(-vel, 0, 0));
-				move_angle = 180 * Math.PI/180;
-				break;
-			case 'NW':
-				this._box2dBody.SetLinearVelocity(new IgePoint(-vel*0.707, -vel*0.707, 0));
-				move_angle = -135 * Math.PI/180;
-				break;
-			case 'N':
-				this._box2dBody.SetLinearVelocity(new IgePoint(0, -vel, 0));
-				move_angle = -90 * Math.PI/180;
-				break;
-			case 'NE':
-				this._box2dBody.SetLinearVelocity(new IgePoint(vel*0.707, -vel*0.707, 0));
-				move_angle = -45 * Math.PI/180;
-				break;
-			case 'E':
-				this._box2dBody.SetLinearVelocity(new IgePoint(vel, 0, 0));
-				move_angle = 0 * Math.PI/180;
-				break;
-			case 'SE':
-				this._box2dBody.SetLinearVelocity(new IgePoint(vel*0.707, vel*0.707, 0));
-				move_angle = 45 * Math.PI/180;
-				break;
+		if (direction !== "" && direction in directionMap) {
+			var move_angle = directionMap[direction];
 
-			default:
-				this._box2dBody.SetLinearVelocity(new IgePoint(0, 0, 0));
-				this.bottom.animation.select('stand');
-				break;
-		}
-
-		if (direction !== "") {
+			this._box2dBody.SetLinearVelocity(
+				new IgePoint(Math.cos(move_angle)*vel, Math.sin(move_angle)*vel, 0)
+				);
 			this._box2dBody.SetAwake(true);
 			this.bottom.animation.select('walk');
 			
 			// Walk backwards if we are looking in the opposite direction we're moving
-			angle_delta = this.player.target.angle - move_angle
+			var angle_delta = this.player.target.angle - move_angle
 			while (angle_delta <= -Math.PI) angle_delta += 2*Math.PI;
 		    while (angle_delta > Math.PI) angle_delta -= 2*Math.PI;
 			if (angle_delta > Math.PI/2 || angle_delta < -Math.PI/2) {
@@ -101,6 +74,9 @@ var PlayerComponent = IgeClass.extend({
 			}
 
 			this.align_feet(move_angle);
+		} else {
+			this._box2dBody.SetLinearVelocity(new IgePoint(0, 0, 0));
+			this.bottom.animation.select('stand');
 		}
 	}
 });
