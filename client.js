@@ -22,11 +22,18 @@ var Client = IgeClass.extend({
 		ige.on('texturesLoaded', function() {
 			ige.start(function (success) {
 				if (success) {
-					self.scene1 = new IgeScene2d().id('scene1');
+					self.mainScene = new IgeScene2d()
+						.id('mainScene');
+
+					self.scene1 = new IgeScene2d()
+						.id('scene1')
+						.layer(0)
+						.mount(self.mainScene);
+
 					self.vp1 = new IgeViewport().id('vp1')
 						.autoSize(true)
-						.scene(self.scene1)
-						.drawBounds(true)
+						.scene(self.mainScene)
+						.drawBounds(false)
 						.mount(ige);
 
 					self.backgroundLayer = new IgeTextureMap().id('background')
@@ -64,7 +71,16 @@ var Client = IgeClass.extend({
 							}]
 						})
 						.drawBounds(false)
-						.mount(self.scene1)
+						.mount(self.scene1);
+
+					self.cursorScene = new IgeScene2d()
+						.id('uiScene')
+						.layer(1)
+						.mount(self.mainScene);
+
+					self.cursor = new Cursor()
+						.id('cursor1')
+						.mount(self.cursorScene);
 
 					// Look at the player
 					self.vp1.camera.lookAt(self.medic);

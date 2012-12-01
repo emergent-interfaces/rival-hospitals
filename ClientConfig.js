@@ -8,6 +8,7 @@ var igeClientConfig = {
 		'./gameClasses/TwistableTop.js',
 		'./gameClasses/TwistableBottom.js',
 		'./gameClasses/PlayerComponent.js',
+		'./gameClasses/Cursor.js',
 		/* Standard game scripts */
 		'./client.js',
 		'./index.js'
