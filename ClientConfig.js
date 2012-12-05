@@ -9,6 +9,10 @@ var igeClientConfig = {
 		'./gameClasses/TwistableBottom.js',
 		'./gameClasses/PlayerComponent.js',
 		'./gameClasses/Cursor.js',
+		'./gameClasses/Car.js',
+		'./gameClasses/DriveableComponent.js',
+		'./gameClasses/DriverComponent.js',
+		'./gameClasses/ActorComponent.js',
 		/* Standard game scripts */
 		'./client.js',
 		'./index.js'

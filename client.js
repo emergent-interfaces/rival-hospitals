@@ -53,6 +53,7 @@ var Client = IgeClass.extend({
 					self.medic = new TwistableCharacter()
 						.id('medic1')
 						.addComponent(PlayerComponent)
+						.addComponent(ActorComponent)
 						.box2dBody({
 							type: 'dynamic',
 							linearDamping: 0.0,
@@ -65,13 +66,22 @@ var Client = IgeClass.extend({
 								density: 1.0,
 								friction: 0.5,
 								restitution: 0.2,
+								filter: {
+									groupIndex: -1
+								},
 								shape: {
 									type: 'rectangle'
 								}
 							}]
 						})
-						.drawBounds(false)
 						.mount(self.scene1);
+
+					self.car = new Car()
+						.id('car1')
+						.mount(self.scene1)
+						.translateTo(20, 130, 0);
+
+					//self.medic.addComponent(DriverComponent, {driveable: self.car});
 
 					self.cursorScene = new IgeScene2d()
 						.id('uiScene')
